@@ -112,7 +112,11 @@ func main() {
 	}
 	fmt.Printf("toml: %v\n", data)
 
+	// Here is where I add my custom parser
 	p.Handle("myType", MyHandler)
+	
+	// Now I use my custom parser just like the
+	// built-in parsers.
 	data, err = p.Parse("myType", myType)
 	if err != nil {
 		fmt.Printf("Err: %v\n", err)
@@ -120,7 +124,7 @@ func main() {
 	fmt.Printf("myType: %v\n", data)
 }
 
-// MyHandler decodes "myType" input into a go map[string]interface{}
+// MyHandler is a custom parser that decodes "myType" input into a go map[string]interface{}
 // "myType" is just a list of keys and values separated by a tilde (~)
 // This is only to demonstrate the use of p.Handle(). Don't use this code.
 func MyHandler(input string) (map[string]interface{}, error) {
