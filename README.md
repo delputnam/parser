@@ -1,12 +1,13 @@
 # Parser
 
-Parser is an extensible parser that decodes
-multiple data formats and extracts the results
-into a go map.
+Parser is an extensible parser that decodes multiple data formats and extracts
+the results into a go map.
 
 ## Features
 
-JSON, YAML, and TOML handlers are included.  You can easily add your own handler by writing a function that implements `ParseFunc`. Then add your function by calling: `Handle("my-type", MyTypeFunc)`. See the code below for an example.
+JSON, YAML, and TOML handlers are included.  You can easily add your own handler
+by writing a function that implements `ParseFunc`. Then add your function by
+calling: `Handle("my-type", MyTypeFunc)`. See the code below for an example.
 
 ## Install
 
@@ -15,6 +16,25 @@ go get github.com/delputnam/parser
 ```
 
 ## How to use
+
+First instantiate a new parser: `p := parser.NewParser()`
+
+Then call  `p.Parse(inputType, inputData)` where `inputType` is a string that
+corresponds to the format of the string in `inputData`.
+
+You can specify one of the built-in handlers with the following:
+
+  * JSON with an `inputType` of `"json"`
+  * YAML with an `inputType` of `"yaml"` or `"yml"`
+  * TOML with an `inputType` of `"toml"` or `"tml"`
+
+If the parser succeeds, `p.Parse()` returns a map where each named key in the input
+data is the value of a key in the map `map[string]interface{}`.
+
+To add your own parser, write a function that implements the `ParseFunc` interface and then register it using `p.Handle(inputType, HandlerFunc)`. After that, it will be available from `p.Parse()` just like the built-in parsers.
+
+See the example code below for more info. 
+
 ```
 package main
 
@@ -100,12 +120,9 @@ func main() {
 	fmt.Printf("myType: %v\n", data)
 }
 
-// MyHandler decodes my-type input into a go map[string]interface{}
-// my-type is just a list of keys and values separated by a tilde (~)
-// Warning: This function is just to demonstrate how to add your own
-// parser handler and should not be used for anything else...ever.
-// There is no error checking and it probably won't be useful for
-// almost anything...ever.
+// MyHandler decodes "myType" input into a go map[string]interface{}
+// "myType" is just a list of keys and values separated by a tilde (~)
+// This is only to demonstrate the use of p.Handle(). Don't use this code.
 func MyHandler(input string) (map[string]interface{}, error) {
 	out := make(map[string]interface{})
 

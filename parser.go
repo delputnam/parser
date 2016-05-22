@@ -35,8 +35,8 @@ func NewParser() *Parser {
 
 //Handle registers a handler for the given ext
 //This is public so new parsers can be registered
-func (p *Parser) Handle(ext string, fn ParseFunc) {
-	p.parsers[ext] = fn
+func (p *Parser) Handle(inputType string, fn ParseFunc) {
+	p.parsers[inputType] = fn
 }
 
 // Parse deserializes the data contained in input based on the ext
