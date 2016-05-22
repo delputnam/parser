@@ -100,10 +100,10 @@ func main() {
 	fmt.Printf("myType: %v\n", data)
 }
 
-// MyHandler decodes my-type imput into a go map[string]interface{}
+// MyHandler decodes my-type input into a go map[string]interface{}
 // my-type is just a list of keys and values separated by a tilde (~)
 // Warning: This function is just to demonstrate how to add your own
-// parser handler and should not be used for anyting else...ever.
+// parser handler and should not be used for anything else...ever.
 // There is no error checking and it probably won't be useful for
 // almost anything...ever.
 func MyHandler(input string) (map[string]interface{}, error) {
