@@ -4,6 +4,7 @@ package parser
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/BurntSushi/toml"
 	"gopkg.in/yaml.v2"
@@ -18,6 +19,12 @@ type (
 type Parser struct {
 	parsers map[string]ParseFunc
 }
+
+var (
+	// ErrUnknownParser is an error indicating that a parser for the requested
+	// inputType is not registered.
+	ErrUnknownParser = errors.New("parser: no parser for requested input type")
+)
 
 //NewParser creates a new Parser instance
 func NewParser() *Parser {
@@ -40,17 +47,20 @@ func (p *Parser) Handle(inputType string, fn ParseFunc) {
 }
 
 // Parse deserializes the data contained in input based on the ext
-func (p *Parser) Parse(ext string, txt string) (front map[string]interface{}, err error) {
-	return p.parse(ext, txt)
+func (p *Parser) Parse(inputType string, input string) (map[string]interface{}, error) {
+	return p.parse(inputType, input)
 }
 
-func (p *Parser) parse(ext string, txt string) (front map[string]interface{}, err error) {
-	h := p.parsers[ext]
-	data, err := h(txt)
-
-	if err != nil {
-		return nil, err
+func (p *Parser) parse(inputType string, input string) (data map[string]interface{}, err error) {
+	if h, exists := p.parsers[inputType]; exists {
+		data, err = h(input)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		return nil, ErrUnknownParser
 	}
+
 	return data, nil
 
 }
