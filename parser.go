@@ -23,7 +23,7 @@ type Parser struct {
 var (
 	// ErrUnknownParser is an error indicating that a parser for the requested
 	// inputType is not registered.
-	ErrUnknownParser = errors.New("parser: no parser for requested input type")
+	errUnknownParser = errors.New("parser: no parser for requested input type")
 )
 
 //NewParser creates a new Parser instance
@@ -58,7 +58,7 @@ func (p *Parser) parse(inputType string, input string) (data map[string]interfac
 			return nil, err
 		}
 	} else {
-		return nil, ErrUnknownParser
+		return nil, errUnknownParser
 	}
 
 	return data, nil
